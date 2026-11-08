@@ -1,0 +1,7 @@
+---
+import Base from '../layouts/Base.astro';
+import { renderView } from '../lib/views';
+---
+<Base view="book" title={'Book on WhatsApp - Naila’s Beauty Studio, Islamabad'} description={'Book bridal makeup, hair, nails or facials at Naila’s Beauty Studio, I-8/3 Islamabad. Send a WhatsApp message with your service and date.'} closing={false}>
+  <div class="view is-on" data-view="book"><Fragment set:html={renderView('book')} /></div>
+</Base>

@@ -1,0 +1,140 @@
+  <section class="hero grain" id="hero" aria-label="Welcome">
+    <div class="hero__media" role="group" aria-roledescription="carousel" aria-label="Work from Naila’s studio">
+      <div class="hero__frame">
+        <figure class="hero__slide is-on" role="group" aria-roledescription="slide" aria-label="1 of 4" style="--pos: 50% 30%"><img src="/img/hero-ivory.webp" alt="Soft bridal makeup with a pearl tikka and ivory embroidered outfit" width="736" height="1308" fetchpriority="high"></figure>
+        <figure class="hero__slide" role="group" aria-roledescription="slide" aria-label="2 of 4" aria-hidden="true" style="--pos: 50% 26%"><img data-src="/img/hero-lehenga.webp" alt="Rose glow makeup with a kundan choker on a pink embroidered outfit" width="736" height="1308"></figure>
+        <figure class="hero__slide" role="group" aria-roledescription="slide" aria-label="3 of 4" aria-hidden="true" style="--pos: 50% 30%"><img data-src="/img/hero-beige.webp" alt="Peach shimmer eyes, mehndi hands and a gold kundan tikka and earrings" width="736" height="1308"></figure>
+        <figure class="hero__slide" role="group" aria-roledescription="slide" aria-label="4 of 4" aria-hidden="true" style="--pos: 50% 28%"><img data-src="/img/hero-rose.webp" alt="Rose-gold bridal look with a pearl tikka and jhumka earrings" width="736" height="1093"></figure>
+      </div>
+    </div>
+    <div class="hero__ctrl" role="group" aria-label="Slideshow controls">
+      <button class="hero__pause" id="heroPause" aria-label="Pause slideshow"></button>
+      <button class="hero__dot is-on" aria-label="Show photograph 1"></button>
+      <button class="hero__dot" aria-label="Show photograph 2"></button>
+      <button class="hero__dot" aria-label="Show photograph 3"></button>
+      <button class="hero__dot" aria-label="Show photograph 4"></button>
+    </div>
+    <div class="wrap hero__in">
+      <div class="hero__text">
+        <h1 class="hero__display"><span class="ln"><span>Bridal makeup</span></span><span class="ln ln--accent"><span>and beauty.</span></span></h1>
+        <p class="hero__lead">Bridal looks planned around your outfit, plus hair, nails and skin care.</p>
+        <div class="hero__cta">
+          <a class="btn" href="/book/">Book appointment</a>
+          <a class="link" href="/services/">Our services <svg><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="svcTitle">
+    <div class="wrap">
+      <div class="shead rv"><h2 class="h2" id="svcTitle">Our services</h2><p>Bridal, hair, nails and skin care in Islamabad. Choose a category to see everything in it.</p></div>
+      <ul class="svc-list rvk" id="svcList"></ul>
+      <p class="svc-more rv">Looking to learn instead? <a class="inl" href="/academy/">See our beauty courses</a>.</p>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="hlTitle">
+    <div class="wrap grid">
+      <div class="hl__head rv">
+        <h2 class="h2" id="hlTitle">Starting prices</h2>
+        <p>Some of our starting prices. The final price depends on your hair length or the look you choose, and we confirm it on WhatsApp before you book.</p>
+        <a class="link" href="/services/" id="figAll">Full menu &amp; prices <svg><use href="#i-arrow"/></svg></a>
+        <p class="sample-note"><svg><use href="#i-info"/></svg>Sample prices for this design. The studio’s own prices replace them before launch.</p>
+      </div>
+      <div class="hl__list" id="hlList"></div>
+    </div>
+  </section>
+
+  <section class="sec band grain" aria-labelledby="bandTitle">
+    <div class="wrap grid">
+      <figure class="duo">
+        <div class="duo__main uv"><img src="/img/bridal-pink.webp" alt="Bridal makeup with a pearl tikka and jhoomar, a kundan and pearl choker and a pink and gold dupatta" width="736" height="920" loading="lazy"></div>
+      </figure>
+      <div class="band__copy rv">
+        <h2 class="h2" id="bandTitle">Bridal makeup for all four events</h2>
+        <p>We do makeup and hair for Nikkah, Mehndi, Baraat and Walima, to go with your outfits and jewellery. Wedding season fills up early, so send us your dates as soon as you have them.</p>
+        <ul class="evlist" id="evList"></ul>
+        <div class="band__cta">
+          <a class="btn" href="/bridal/">Explore bridal</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec--ba" aria-labelledby="baTitle">
+    <div class="wrap grid">
+      <div class="ba-copy rv">
+        <h2 class="h2" id="baTitle">See the difference</h2>
+        <p>Hair before and after a visit to the studio. Drag the line to compare.</p>
+        <dl class="defs">
+          <div><dt>Smoother</dt><dd>Frizz and flyaways settled, so the hair lies flat and neat.</dd></div>
+          <div><dt>Shinier</dt><dd>Dull, dry lengths turned glossy.</dd></div>
+          <div><dt>Warmer</dt><dd>A soft caramel tone through the lengths.</dd></div>
+        </dl>
+      </div>
+      <div class="ba" id="ba">
+        <div class="ba__half"><img src="/img/ba-hair-before.webp" alt="Before: dry, frizzy dark brown hair" width="302" height="610" loading="lazy"></div>
+        <div class="ba__half ba__after"><img src="/img/ba-hair-after.webp" alt="After: smooth, glossy brown hair with soft caramel tones" width="304" height="610" loading="lazy"></div>
+        <span class="ba__tag ba__tag--l">Before</span><span class="ba__tag ba__tag--r">After</span>
+        <span class="ba__bar"></span>
+        <span class="ba__knob"><svg viewBox="0 0 24 24"><path d="M9 6 3 12l6 6M15 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></span>
+        <input type="range" id="baRange" min="0" max="100" value="50" aria-label="Drag to compare before and after">
+      </div>
+    </div>
+  </section>
+
+  <section class="sec expect" aria-labelledby="expTitle">
+    <div class="wrap grid">
+      <div class="expect__side rv">
+        <h2 class="h2 expect__title" id="expTitle">What to expect</h2>
+        <p class="expect__lead">Three things to know before your first visit.</p>
+      </div>
+      <ul class="expect__list rvk">
+        <li style="--i:0"><h3>Everything in one studio</h3><p>Hair, makeup, nails and skin care, so one visit can cover it all.</p></li>
+        <li style="--i:1"><h3>Prices are agreed first</h3><p>Starting prices are on this site. The final price is agreed on WhatsApp before we begin.</p></li>
+        <li style="--i:2"><h3>Your own skin tone</h3><p>We match the base to your skin and never use a lighter shade.</p></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec insta" aria-labelledby="igTitle">
+    <div class="wrap grid">
+      <div class="insta__copy rv">
+        <h2 class="h2" id="igTitle">Recent work</h2>
+        <p>Brides, hair colour and nails. More on Instagram.</p>
+        <a class="ig-handle" href="https://www.instagram.com/nailasbeautysalon/" target="_blank" rel="noopener"><svg class="ig-ico"><use href="#i-ig"/></svg>@nailasbeautysalon<svg class="ig-arr"><use href="#i-arrow"/></svg></a>
+      </div>
+      <div class="insta__grid">
+        <figure class="uv" style="--i:0"><img src="/img/hair-pearls.webp" alt="Half-up bridal hair with a pearl lattice" width="736" height="1307" loading="lazy" style="object-position:50% 40%"></figure>
+        <figure class="uv" style="--i:1"><img src="/img/d-bun.webp" alt="Low bridal bun with a jewelled pin" width="243" height="365" loading="lazy"></figure>
+        <figure class="uv" style="--i:2"><img src="/img/d-gold-hands.webp" alt="Manicured hands with rings, a gold necklace and a gold embroidered outfit" width="480" height="640" loading="lazy"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec band grain how" aria-labelledby="howTitle">
+    <div class="wrap how__in">
+      <h2 class="h2 rv" id="howTitle">Booking takes one message</h2>
+      <ol class="timeline timeline--3 rv">
+        <li><span class="timeline__dot" aria-hidden="true"></span><b>Tell us what you’d like</b></li>
+        <li><span class="timeline__dot" aria-hidden="true"></span><b>We reply with options</b></li>
+        <li><span class="timeline__dot" aria-hidden="true"></span><b>Confirm your time</b></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="hfaqTitle">
+    <div class="wrap grid">
+      <div class="faq-side rv">
+        <h2 class="h2" id="hfaqTitle">Good to know</h2>
+        <p>Still unsure? Ask us anything on WhatsApp.</p>
+      </div>
+      <div class="faq rv">
+        <details open><summary>How do I book?<i></i></summary><p>On WhatsApp. Send the service you’d like, your preferred date and, if you have one, a reference photo. We reply with availability, options and pricing, and your appointment is confirmed with us there. The <a class="inl" href="/book/">booking form</a> writes the message for you.</p></details>
+        <details><summary>Are the prices on the site final?<i></i></summary><p>They’re starting prices. The final price depends on the service and is confirmed on WhatsApp, together with availability, before you book.</p></details>
+        <details><summary>Do you do bridal makeup for every wedding event?<i></i></summary><p>Yes. We do makeup and hair for Nikkah, Mehndi, Baraat and Walima. Wedding season fills up early, so send us your dates as soon as you have them. See <a class="inl" href="/bridal/">bridal makeup and hair</a>.</p></details>
+        <details><summary>Do you teach courses?<i></i></summary><p>Yes. Naila’s Academy is the training side of the studio, with makeup, hairstyling and nail courses. Message us for the current options, or see <a class="inl" href="/academy/">beauty courses</a>.</p></details>
+      </div>
+    </div>
+  </section>

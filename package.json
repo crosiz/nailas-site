@@ -1,0 +1,22 @@
+{
+  "name": "nailas-beauty-studio",
+  "version": "2.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Website for Naila’s Beauty Studio. Beauty, aesthetics and training academy, Sangam Market, I-8/3, Islamabad. Bookings on WhatsApp.",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "dev:preview": "astro dev --mode preview",
+    "build": "astro build && node scripts/check-dist.mjs",
+    "build:preview": "astro build --mode preview && node scripts/check-dist.mjs --preview",
+    "preview": "astro preview",
+    "check": "node scripts/check-dist.mjs",
+    "smoke": "node scripts/smoke-test.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.4.6"
+  }
+}

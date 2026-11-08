@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import { SERVICES_LABEL } from '../data/site';
+---
+<Base view="notfound" title="Page not found · Naila’s Beauty Studio" description="This page could not be found." closing={false} noindex>
+  <div class="view is-on" data-view="notfound">
+    <header class="ph ph--plain"><div class="wrap ph__grid"><div class="ph__main">
+      <h1 class="pb__title"><span class="ln"><span>Page</span></span><span class="ln"><span>not found</span></span></h1>
+      <p class="ph__lead">The page you were looking for has moved or does not exist.</p>
+      <div class="ph__cta"><a class="btn" href="/">Back to home</a><a class="link" href="/services/">{SERVICES_LABEL} <svg><use href="#i-arrow"/></svg></a></div>
+    </div></div></header>
+  </div>
+</Base>

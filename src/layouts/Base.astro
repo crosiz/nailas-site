@@ -1,0 +1,57 @@
+---
+import '../styles/global.css';
+import sprite from '../components/Sprite.html?raw';
+import header from '../partials/header.html?raw';
+import sheet from '../partials/sheet.html?raw';
+import closing from '../partials/closing.html?raw';
+import footer from '../partials/footer.html?raw';
+import dock from '../partials/dock.html?raw';
+import fab from '../partials/fab.html?raw';
+import { priceCopy } from '../lib/copy';
+import { withRef } from '../lib/ref';
+import { schemaGraph } from '../lib/schema';
+
+interface Props { title: string; description: string; view: string; closing?: boolean; image?: string; noindex?: boolean }
+const SHARE_IMAGE = '/img/og-share.jpg'; // 1200x630 JPEG card: the shape and weight WhatsApp, Facebook and X preview best
+const { title, description, view, closing: showClosing = true, image = SHARE_IMAGE, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const mark = (h: string) => h.replace(new RegExp(`data-nav="${view}"`, 'g'), `data-nav="${view}" aria-current="page"`);
+// Structured data goes on indexable pages only (the 404 page is noindex and has nothing to describe).
+const ld = noindex ? null : schemaGraph({ origin: Astro.site!.origin, url: canonical, view, title, description });
+---
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{title}</title>
+  <meta name="description" content={description}>
+  <meta name="theme-color" content="#f2ded2">
+  {noindex ? <meta name="robots" content="noindex"> : <><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><link rel="canonical" href={canonical}></>}
+  <link rel="icon" href="/favicon.ico" sizes="48x48 32x32 16x16">
+  <link rel="icon" type="image/png" href="/icon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <meta property="og:type" content="website"><meta property="og:site_name" content="Naila’s Beauty Studio"><meta property="og:locale" content="en_GB">
+  <meta property="og:title" content={title}><meta property="og:description" content={description}>
+  {!noindex && <meta property="og:url" content={canonical}>}
+  <meta property="og:image" content={new URL(image, canonical).href}>
+  {image === SHARE_IMAGE && <><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Naila’s Beauty Studio: bridal makeup and beauty in Islamabad"></>}
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" href="/fonts/cormorant-500.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/montserrat-300.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/montserrat-400.woff2" as="font" type="font/woff2" crossorigin>
+  {ld && <script type="application/ld+json" set:html={JSON.stringify(ld)}></script>}
+</head>
+<body data-view={view}>
+  <a class="skip" href="#main">Skip to content</a>
+  <Fragment set:html={sprite} />
+  <Fragment set:html={mark(priceCopy('header', header))} />
+  <Fragment set:html={mark(priceCopy('sheet', sheet))} />
+  <main id="main"><slot /></main>
+  {showClosing && <Fragment set:html={withRef(closing, `web-${view}-closing`)} />}
+  <Fragment set:html={priceCopy('footer', footer)} />
+  <Fragment set:html={withRef(dock, `web-${view}-dock`)} />
+  <Fragment set:html={withRef(fab, `web-${view}-fab`)} />
+  <script>import '../scripts/site.ts';</script>
+</body>
+</html>

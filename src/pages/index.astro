@@ -1,0 +1,7 @@
+---
+import Base from '../layouts/Base.astro';
+import { renderView } from '../lib/views';
+---
+<Base view="home" title={'Naila’s Beauty Studio - Beauty Salon in I-8, Islamabad'} description={'Beauty salon and bridal makeup studio in A&K Plaza, Sangam Market, Sector I-8/3, Islamabad. Bridal, hair, nails, facials. Book on WhatsApp.'} closing={true}>
+  <div class="view is-on" data-view="home"><Fragment set:html={renderView('home')} /></div>
+</Base>

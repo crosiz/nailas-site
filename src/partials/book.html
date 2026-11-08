@@ -1,0 +1,70 @@
+  <header class="ph ph--plain ph--book">
+    <div class="wrap ph__grid">
+      <div class="ph__main">
+        <p class="crumb"><a href="/">Home</a><span aria-hidden="true">/</span>Book</p>
+        <h1 class="pb__title"><span class="ln"><span>Book an</span></span><span class="ln"><span>appointment</span></span></h1>
+        <p class="ph__lead">Pick what you want and when. We write the WhatsApp message for you, and you confirm the time and price in the chat.</p>
+      </div>
+      <aside class="book-next" aria-label="What happens next">
+        <p class="book-next__title">What happens next</p>
+        <ul class="book-next__list">
+          <li><b>You send the message</b><span>WhatsApp opens with it ready to send.</span></li>
+          <li><b>We reply</b><span>With free times and the price.</span></li>
+          <li><b>You confirm</b><span>Nothing is booked until you say yes in the chat.</span></li>
+        </ul>
+      </aside>
+    </div>
+  </header>
+  <section class="sec book-sec" aria-label="Booking form">
+    <div class="wrap book2">
+      <form class="bform" id="planForm" novalidate>
+        <fieldset class="bstep" data-step="svc">
+          <legend><span class="bstep__n" aria-hidden="true">1</span>What would you like? <span class="opt">Choose one or more</span></legend>
+          <div class="opts opts--cards" id="svcOpts">
+            <input type="checkbox" id="s-bridal" value="Bridal makeup & hair"><label for="s-bridal"><span class="svc-card__name">Bridal</span><span class="svc-card__desc">Nikkah to Walima</span></label>
+            <input type="checkbox" id="s-party" value="Party makeup"><label for="s-party"><span class="svc-card__name">Party makeup</span><span class="svc-card__desc">Parties and evenings</span></label>
+            <input type="checkbox" id="s-hair" value="Hair & colour"><label for="s-hair"><span class="svc-card__name">Hair &amp; colour</span><span class="svc-card__desc">Cut, colour, styling</span></label>
+            <input type="checkbox" id="s-nails" value="Nails"><label for="s-nails"><span class="svc-card__name">Nails</span><span class="svc-card__desc">Manicure, gel, nail art</span></label>
+            <input type="checkbox" id="s-skin" value="Facial / HydraFacial"><label for="s-skin"><span class="svc-card__name">Skin care</span><span class="svc-card__desc">Facials and HydraFacial</span></label>
+            <input type="checkbox" id="s-lash" value="Korean lash lift"><label for="s-lash"><span class="svc-card__name">Lash lift</span><span class="svc-card__desc">Natural lift and curl</span></label>
+          </div>
+        </fieldset>
+        <fieldset class="bstep" data-step="when">
+          <legend><span class="bstep__n" aria-hidden="true">2</span>When suits you? <span class="opt">Optional</span></legend>
+          <div class="row2">
+            <div class="field"><label for="pDate">Preferred date</label><input class="input" type="date" id="pDate"></div>
+            <div class="field"><span class="field__label" id="todLabel">Time of day</span>
+              <div class="opts opts--seg" role="radiogroup" aria-labelledby="todLabel">
+                <input type="radio" name="tod" id="t-am" value="morning"><label for="t-am">Morning</label>
+                <input type="radio" name="tod" id="t-pm" value="afternoon"><label for="t-pm">Afternoon</label>
+                <input type="radio" name="tod" id="t-ev" value="evening"><label for="t-ev">Evening</label>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+        <fieldset class="bstep" data-step="you">
+          <legend><span class="bstep__n" aria-hidden="true">3</span>About you <span class="opt">Optional</span></legend>
+          <div class="field"><label for="pName">Your name</label><input class="input" type="text" id="pName" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" placeholder="So we know who’s messaging"></div>
+          <div class="field"><label for="pNote">Anything else?</label><textarea class="input" id="pNote" placeholder="Event, outfit colour, hair length, sensitive skin…"></textarea></div>
+        </fieldset>
+      </form>
+      <aside class="bsum" aria-label="Your message">
+        <div class="bsum__card grain">
+          <div class="bsum__head"><b>Your message</b><small id="pCount">Choose a service to start</small></div>
+          <p class="bsum__msg" id="pPreview" aria-live="polite">Hi Naila’s, I’d like to book an appointment.</p>
+          <a class="btn" id="pSend" data-send href="#" target="_blank" rel="noopener" aria-disabled="true" aria-describedby="pMsg"><svg><use href="#i-wa"/></svg>Send on WhatsApp</a>
+          <p class="form__msg" id="pMsg">Choose at least one service to continue.</p>
+          <noscript><p class="form__msg">This page needs JavaScript to write your message. You can <a class="inl" href="https://wa.me/923335559049" target="_blank" rel="noopener">message us on WhatsApp</a> or <a class="inl" href="tel:+923335559049">call us</a> instead.</p></noscript>
+        </div>
+        <ul class="bsum__notes">
+          <li class="bsum__note--m">Nothing is booked until you confirm in the chat.</li>
+          <li class="bsum__note--m">Price and time are agreed before you come.</li>
+          <li>Prefer to talk? <a href="tel:+923335559049">Call us</a>.</li>
+        </ul>
+      </aside>
+      <div class="bbar" id="bbar">
+        <p class="bbar__msg" id="pBarMsg">Choose a service to start</p>
+        <a class="btn" id="pSendBar" data-send href="#" target="_blank" rel="noopener" aria-disabled="true" aria-label="Send on WhatsApp"><svg><use href="#i-wa"/></svg><span class="bbar__full">Send on WhatsApp</span><span class="bbar__short" aria-hidden="true">Send</span></a>
+      </div>
+    </div>
+  </section>
