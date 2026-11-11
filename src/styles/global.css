@@ -3,7 +3,7 @@
 @font-face { font-family: "Montserrat"; font-style: normal; font-weight: 300; font-display: swap; src: url(/fonts/montserrat-300.woff2) format("woff2"); }
 @font-face { font-family: "Montserrat"; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/montserrat-400.woff2) format("woff2"); }
 @font-face { font-family: "Montserrat"; font-style: normal; font-weight: 500; font-display: swap; src: url(/fonts/montserrat-500.woff2) format("woff2"); }
-/* Layout: a small multi-page site (Home, Services & prices, Bridal, Academy, Contact, Book) routed on the
+/* Layout: a small multi-page site (Home, Services, Bridal, Academy, Contact, Book) routed on the
    hash so each page is its own view. The blush hero opens Home and a smaller banner in the same
    composition opens every other page; after that it's quiet white space on a 12-column grid,
    hairlines and photographs of detail (hands, jewellery, hair) rather than faces. Type and colour follow the
@@ -103,7 +103,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .hero__slide.is-on { opacity: 1; }
 .hero__slide img { width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 30%); transform: scale(1.04); transition: transform 8s linear; }
 .hero__slide.is-on img { transform: scale(1); }
-.hero__in { position: relative; z-index: 2; min-height: clamp(600px, 90svh, 800px); display: flex; flex-direction: column; padding-top: calc(var(--header) + env(safe-area-inset-top, 0px)); }
+.hero__in { position: relative; z-index: 2; min-height: clamp(600px, 90svh, 800px); display: flex; flex-direction: column; padding-top: calc(var(--header) + var(--ann-h, 0px) + env(safe-area-inset-top, 0px)); }
 .hero__text { max-width: 560px; margin-block: auto; padding-block: 48px 40px; }
 /* The big display line is a paragraph and the keyword-bearing sentence under it is the page's h1 (styled as the lead), so the page keeps one descriptive heading without changing the design */
 .hero__display { font-family: var(--serif); color: var(--ink); margin: 0; text-wrap: balance; font-synthesis: none; font-weight: 500; letter-spacing: .005em; }
@@ -133,35 +133,10 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
   .insta__grid img { animation: breathe 14s ease-in-out infinite alternate; }
   .insta__grid figure:nth-child(2) img { animation-delay: -5s; }
   .insta__grid figure:nth-child(3) img { animation-delay: -9s; }
-  .prices.stagger li { transition: transform .9s var(--ease); }
-  .prices.stagger.is-low li { transform: translateY(14px); }
-  .prices.stagger li:nth-child(2) { transition-delay: .06s; }
-  .prices.stagger li:nth-child(3) { transition-delay: .12s; }
-  .prices.stagger li:nth-child(4) { transition-delay: .18s; }
-  .prices.stagger li:nth-child(5) { transition-delay: .24s; }
-  .prices.stagger li:nth-child(6) { transition-delay: .3s; }
   .ba.is-hinting .ba__after, .ba.is-hinting .ba__bar, .ba.is-hinting .ba__knob { transition: clip-path .9s var(--ease), left .9s var(--ease); }
 }
 @keyframes breathe { from { transform: scale(1); } to { transform: scale(1.07); } }
-/* ---------- Price lists ---------- */
-.prices { list-style: none; margin: 0; padding: 0; }
-.prices li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 20px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: baseline; }
-.prices li:first-child { border-top: 1px solid var(--line); }
-.prices b { font-weight: 400; color: var(--ink); font-size: 17px; display: flex; align-items: baseline; gap: 12px; min-width: 0; }
-.prices b::after { content: ""; flex: 1; border-bottom: 1px dotted var(--line-2); transform: translateY(-4px); min-width: 16px; }
-.prices .price { font-weight: 400; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 16px; }
-.prices .price small { font-weight: 300; color: var(--muted); font-size: 12px; letter-spacing: .06em; margin-right: 5px; }
-.prices .desc { grid-column: 1; font-size: 14.5px; color: var(--muted); }
-.tag-new { display: inline-block; padding: 2px 7px; border-radius: 2px; background: var(--blush-2); color: var(--rosewood); font-size: 10px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; }
 /* ---------- Home ---------- */
-.hl__head { grid-column: 1 / span 4; }
-.hl__head p { margin-top: 20px; }
-.hl__head .link { margin-top: 24px; }
-.hl__list { grid-column: 6 / span 7; display: grid; grid-template-columns: minmax(0, 1fr); }
-.hl__list .prices + .prices li:first-child { border-top: 0; }
-.hl__list .prices b::after { display: block; }
-.hl__list .desc { display: none; }
-.hl__list .prices li { padding: 16px 0; }
 .band { background: var(--blush); }
 .band__copy { grid-column: 7 / span 6; align-self: center; }
 .band__copy > p { margin-top: 20px; max-width: 480px; }
@@ -263,10 +238,6 @@ textarea.input { height: 88px; padding: 12px 14px; line-height: 1.5; resize: ver
   .nav { gap: 22px; }
   .nav a { letter-spacing: .1em; }
 }
-@media (max-width: 1100px) {
-  .hl__head, .hl__list { grid-column: 1 / -1; }
-  .hl__list { margin-top: 32px; }
-}
 /* ---------- Phone ---------- */
 @media (max-width: 960px) {
   body { font-size: 16px; }
@@ -282,6 +253,7 @@ textarea.input { height: 88px; padding: 12px 14px; line-height: 1.5; resize: ver
   .h2 { font-size: clamp(30px, 8.4vw, 38px); }
   .hero__media { position: relative; width: 100%; height: min(64svh, 540px); min-height: 400px; -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 96%); mask-image: linear-gradient(to bottom, #000 55%, transparent 96%); }
   .hero__frame { -webkit-mask-image: linear-gradient(to bottom, rgb(74 52 42 / 30%) 0, #000 22%); mask-image: linear-gradient(to bottom, rgb(74 52 42 / 30%) 0, #000 22%); }
+  .hero { padding-top: var(--ann-h, 0px); }
   .hero__in { min-height: 0; padding-top: 0; margin-top: -100px; }
   .hero__text { padding-block: 0 28px; max-width: none; }
   .hero__display { margin-top: 16px; font-size: clamp(40px, 11.4vw, 54px); }
@@ -290,14 +262,11 @@ textarea.input { height: 88px; padding: 12px 14px; line-height: 1.5; resize: ver
   .hero__cta .btn { flex: 1 1 100%; }
   .hero__cta .link { margin: 0 auto; }
   .hero__ctrl { top: calc(min(64svh, 540px) - 180px); bottom: auto; }
-  .hl__list { grid-template-columns: minmax(0, 1fr); margin-top: 0; }
-  .hl__list .prices + .prices li:first-child { border-top: 0; }
   .band__cta .btn { flex: 1 1 100%; }
   .band__cta .link { margin: 0 auto; }
   .ba { aspect-ratio: 4/4.6; }
   .insta__grid { gap: 8px; }
   .insta__copy .btn { width: 100%; }
-  .prices b { font-size: 16px; }
   .row2 { grid-template-columns: minmax(0, 1fr); gap: 30px; }
   .faq summary { font-size: 16.5px; padding: 18px 0; }
   .faq details p { padding-right: 0; font-size: 15px; }
@@ -325,9 +294,6 @@ body:not([data-view="home"]) .header:not(.is-solid)::before { opacity: 1; }
 .hero__display .ln { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
 .hero__display .ln > span { display: block; }
 .hero__display .ln--accent { color: var(--rosewood); }
-/* Sample-price note */
-.sample-note { margin-top: 26px; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted); }
-.sample-note svg { width: 15px; height: 15px; flex: none; margin-top: 3px; color: var(--rosewood); }
 /* Home: bridal band */
 .band__copy { grid-column: 7 / span 6; align-self: center; }
 .band__copy > p { margin-top: 20px; max-width: 520px; }
@@ -335,8 +301,6 @@ body:not([data-view="home"]) .header:not(.is-solid)::before { opacity: 1; }
 .evlist li { display: grid; grid-template-columns: 96px minmax(0, 1fr) auto; gap: 4px 20px; align-items: baseline; padding: 16px 0; border-bottom: 1px solid var(--line-2); }
 .evlist b { font-weight: 400; font-size: 18px; color: var(--ink); }
 .evlist span { font-size: 14.5px; color: var(--text); }
-.evlist em { font-style: normal; font-size: 14px; color: var(--ink); white-space: nowrap; font-variant-numeric: tabular-nums; }
-.evlist em small { font-size: 12px; color: var(--muted); margin-right: 4px; }
 /* What to expect: text-led */
 .expect { background: var(--grain), radial-gradient(110% 95% at 16% 40%, #fdf4ef 0%, var(--blush) 55%, #f6e3d9 100%); }
 .expect__side { grid-column: 1 / span 4; display: grid; gap: 16px; align-content: start; }
@@ -359,8 +323,7 @@ body:not([data-view="home"]) .header:not(.is-solid)::before { opacity: 1; }
 .closing { border-top: 0; padding-block: clamp(80px, 9vw, 130px); }
 /* Nothing under 12px */
 .footer__title, .field legend, .field > label { font-size: 12px; }
-.tag-new, .ba__tag { font-size: 12px; }
-.prices .price small { font-size: 12px; }
+.ba__tag { font-size: 12px; }
 /* Motion: the hero headline rises out of its own lines */
 @media (prefers-reduced-motion: no-preference) {
   .hero__display .ln > span { animation: lineUp 1.15s var(--ease) both; }
@@ -426,10 +389,6 @@ body.hdr-hidden .tabs-bar { top: env(safe-area-inset-top, 0px); }
   .menu-item:hover .menu-item__go { opacity: 1; transform: none; }
 }
 .menu-item:focus-visible { outline-offset: -2px; }
-/* No prices shown (live build): just the name, the line under it and an arrow that is always there */
-.menu-item.menu-item--np { grid-template-columns: minmax(0, 1fr) 16px; }
-.menu-item--np .menu-item__go { opacity: .6; transform: none; }
-.menu-item--np:is(:hover, :focus-visible) .menu-item__go { opacity: 1; }
 .menu-item:focus-visible .menu-item__go { opacity: 1; transform: none; }
 .menu-help__in { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; padding-block: 40px 8px; }
 .menu-help p { grid-column: 6 / span 7; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; font-size: 16px; color: var(--ink); }
@@ -439,9 +398,6 @@ body.hdr-hidden .tabs-bar { top: env(safe-area-inset-top, 0px); }
 .ev + .ev { padding-left: 26px; border-left: 1px solid var(--line); }
 .ev h3 { font-weight: 300; font-size: clamp(26px, 2.4vw, 34px); line-height: 1.1; letter-spacing: -.02em; transition: color .3s; }
 .ev p { font-size: 15px; }
-.ev__price { margin-top: 4px; font-size: 14px; color: var(--ink); font-variant-numeric: tabular-nums; }
-.ev__price small { font-size: 12px; color: var(--muted); margin-right: 5px; }
-.ev4 + .sample-note { margin-top: 36px; }
 /* Bridal: what to send, beside one photograph */
 .pic { grid-column: 1 / span 5; margin: 0; overflow: hidden; background: var(--blush-2); aspect-ratio: 4 / 5; }
 .pic img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 38%; transition: transform 1.6s var(--ease); }
@@ -559,8 +515,6 @@ body.hdr-hidden .bsum { top: 24px; }
   .ev, .ev + .ev, .ev:nth-child(3), .ev:nth-child(n+3) { padding: 22px 0; margin-top: 0; border-left: 0; border-top: 0; border-bottom: 1px solid var(--line); grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; }
   .ev h3 { font-size: 26px; }
   .ev p { grid-column: 1 / -1; }
-  .ev .ev__price { grid-column: 2; grid-row: 1; align-self: center; margin-top: 0; }
-  .ev4 + .sample-note { margin-top: 24px; }
   .pic { aspect-ratio: 4 / 3.6; }
   .defs div { grid-template-columns: 104px minmax(0, 1fr); }
   .timeline, .timeline--3 { grid-template-columns: minmax(0, 1fr); row-gap: 0; }
@@ -580,11 +534,10 @@ body.hdr-hidden .bsum { top: 24px; }
 /* Home keeps the blush hero. Inner pages open on white with one idea each:
    Services a menu index, Bridal and Academy a split photograph, Contact a map, Book nothing extra. */
 body:not([data-view="home"]) .header::before { background: linear-gradient(to bottom, rgb(255 251 248 / 92%), rgb(255 251 248 / 0%)); }
-.ph { padding-top: calc(var(--header) + env(safe-area-inset-top, 0px) + clamp(48px, 6vw, 92px)); padding-bottom: clamp(52px, 6vw, 92px); }
+.ph { padding-top: calc(var(--header) + var(--ann-h, 0px) + env(safe-area-inset-top, 0px) + clamp(48px, 6vw, 92px)); padding-bottom: clamp(52px, 6vw, 92px); }
 .ph__grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; }
 .ph__lead { margin-top: 22px; font-size: 17.5px; max-width: 470px; }
 .ph__cta { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; }
-.ph .sample-note { margin-top: 20px; max-width: 470px; }
 /* Services: title beside an index of the menu */
 .ph--menu { border-bottom: 1px solid var(--line); }
 .ph--menu .ph__main { grid-column: 1 / span 6; }
@@ -625,14 +578,14 @@ body:not([data-view="home"]) .header::before { background: linear-gradient(to bo
 /* Every other header type has a base column rule; this one only had it from 1101px up, so between 901px and 1100px (tablet landscape, small laptops) its text fell into a single 58px grid column */
 .ph--plain .ph__main { grid-column: 1 / span 9; }
 @media (prefers-reduced-motion: no-preference) {
-  .view.is-on .ph :is(.crumb, .ph__lead, .ph__cta, .ph__index, .sample-note) { animation: fadeOnly .9s ease both; animation-delay: .16s; }
+  .view.is-on .ph :is(.crumb, .ph__lead, .ph__cta, .ph__index) { animation: fadeOnly .9s ease both; animation-delay: .16s; }
   .view.is-on :is(.ph__fig, .ph__map) { animation: fadeOnly 1s ease both; animation-delay: .1s; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .view.is-on .ph :is(.crumb, .ph__lead, .ph__cta, .ph__index, .sample-note), .view.is-on :is(.ph__fig, .ph__map) { animation: fadeOnly .8s ease both; }
+  .view.is-on .ph :is(.crumb, .ph__lead, .ph__cta, .ph__index), .view.is-on :is(.ph__fig, .ph__map) { animation: fadeOnly .8s ease both; }
 }
 @media (max-width: 900px) {
-  .ph { padding-top: calc(var(--header) + env(safe-area-inset-top, 0px) + 32px); padding-bottom: 48px; }
+  .ph { padding-top: calc(var(--header) + var(--ann-h, 0px) + env(safe-area-inset-top, 0px) + 32px); padding-bottom: 48px; }
   .ph__grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   .ph__grid > * { grid-column: 1 / -1 !important; }
   .ph .pb__title { font-size: clamp(38px, 10.6vw, 48px); margin-top: 16px; }
@@ -703,15 +656,14 @@ body:not([data-view="home"]) .header::before { background: linear-gradient(to bo
 .clist h3 { font-weight: 500; font-size: clamp(32px, 3.1vw, 46px); line-height: 1.06; letter-spacing: .005em; }
 .expect__list h3 { font-weight: 500; font-size: clamp(26px, 2.3vw, 33px); line-height: 1.15; letter-spacing: 0; }
 .ig-handle { font-family: var(--serif); font-weight: 500; font-size: clamp(28px, 2.8vw, 40px); letter-spacing: .005em; }
-.prices b, .menu-item__name, .evlist b, .timeline b, .defs dt, .faq summary, .bstep legend, .promise-note b { font-family: var(--serif); font-weight: 500; letter-spacing: .005em; }
-.prices b { font-size: 21px; }
+.menu-item__name, .evlist b, .timeline b, .defs dt, .faq summary, .bstep legend, .promise-note b { font-family: var(--serif); font-weight: 500; letter-spacing: .005em; }
 .menu-item__name { font-size: 22px; line-height: 1.25; }
 .evlist b { font-size: 22px; }
 .timeline b { font-size: 22px; line-height: 1.25; }
 .defs dt { font-size: 20px; }
 .faq summary { font-size: 22px; line-height: 1.3; }
 .bstep legend { font-size: 23px; line-height: 1.3; }
-.prices .price, .menu-item__price, .ev__price, .evlist em { font-weight: 400; }
+.menu-item__price { font-weight: 400; }
 .ix__name { font-family: var(--serif); font-weight: 500; font-size: 24px; letter-spacing: .005em; line-height: 1.2; }
 .tabs-bar button { font-size: 14px; letter-spacing: .02em; }
 .sheet nav a { font-family: var(--serif); font-weight: 500; font-size: 38px; letter-spacing: .005em; }
@@ -722,7 +674,6 @@ body:not([data-view="home"]) .header::before { background: linear-gradient(to bo
   .h2 { font-size: clamp(34px, 9.4vw, 44px); }
   .hero__display { font-size: clamp(48px, 13.4vw, 62px); }
   .pb__title, .ph .pb__title { font-size: clamp(42px, 11vw, 54px); }
-  .prices b { font-size: 19px; }
   .faq summary { font-size: 20px; }
 }
 /* Site layer */
@@ -987,3 +938,25 @@ a, button, label, summary, input, select, textarea { touch-action: manipulation;
 
 /* The cards and buttons on the booking page ignore a long press (no text selection or callout) */
 .opts label { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+
+/* Announcement bar: a slim strip at the top of every page, inside the fixed header. It folds away once the page is scrolled. */
+body.has-ann { --ann-h: 40px; }
+.ann { display: block; height: var(--ann-h, 0px); overflow: hidden; background: var(--blush-2); box-shadow: inset 0 -1px 0 rgb(213 171 147 / 50%); color: var(--ink); text-decoration: none; }
+.ann__in { height: 100%; display: flex; align-items: center; justify-content: center; gap: 14px; font-size: 13px; line-height: 1.3; }
+.ann__tag { flex: none; font-size: 12px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--rosewood); white-space: nowrap; }
+.ann__msg { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ann__go { flex: none; width: 14px; height: 14px; color: var(--rosewood); transition: transform .45s var(--ease); }
+.ann[data-state="before"] [data-for]:not([data-for~="before"]), .ann[data-state="today"] [data-for]:not([data-for~="today"]), .ann[data-state="after"] [data-for]:not([data-for~="after"]) { display: none; }
+@media (hover: hover) { .ann:hover .ann__msg { text-decoration: underline; text-decoration-color: var(--rose); text-underline-offset: 4px; } .ann:hover .ann__go { transform: translateX(4px); } }
+.ann:focus-visible { outline: 2px solid var(--rosewood); outline-offset: -4px; }
+.header.is-solid .ann { height: 0; visibility: hidden; }
+@media (prefers-reduced-motion: no-preference) { .ann { transition: height .35s var(--ease), visibility 0s linear .35s; } }
+@media (max-width: 600px) {
+  body.has-ann { --ann-h: 38px; }
+  .ann__in { gap: 10px; font-size: 12.5px; }
+  .ann__more { display: none; }
+}
+
+/* Contact: opening hours sit under the address in the same column */
+.details3 p + .dt { margin-top: 14px; }
+#hours { scroll-margin-top: calc(var(--header) + 32px); }

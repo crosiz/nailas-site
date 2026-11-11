@@ -1,12 +1,11 @@
-import { MENU } from '../data/menu';
+import { MENU, type Item } from '../data/menu';
 import { SERVICES_LABEL } from '../data/site';
 
 /**
  * JSON-LD for every indexable page, built in one place so the business details cannot drift between pages.
  *
  * Only facts that are also visible on the site are included. These are left out until the studio confirms them AND
- * they are shown on a page (Google requires markup to match visible content): opening hours (only if they are fixed
- * and staffed), coordinates, postal code, price range, reviews or ratings, FAQPage markup and ReserveAction.
+ * they are shown on a page (Google requires markup to match visible content): coordinates, postal code, price range, reviews or ratings, FAQPage markup and ReserveAction.
  * When one is confirmed, show it on the page first, then add it here.
  */
 const NAME = 'Naila’s Beauty Studio';
@@ -35,12 +34,19 @@ export function schemaGraph({ origin, url, view, title, description }: Args) {
       addressLocality: 'Islamabad',
       addressCountry: 'PK',
     },
+    openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday'], opens: '11:00', closes: '20:00' }, // Tuesday is the weekly off; keep in step with the Contact page and footer
     sameAs: SAME_AS,
   };
 
-  // The services page lists every service the studio offers, so say so in structured form too: same names and
-  // descriptions as the visible list, no prices.
+  // The services page lists every service with its price, so say so in structured form too: the same names, lines
+  // and prices as the visible list. Items shown as "Consultation" or similar carry no price.
   if (view === 'services') {
+    const offer = (it: Item) => {
+      if (it.label === 'Free') return { '@type': 'Offer', price: 0, priceCurrency: 'PKR' };
+      if (it.p == null) return undefined;
+      if (it.max || it.from) return { '@type': 'Offer', priceSpecification: { '@type': 'PriceSpecification', priceCurrency: 'PKR', minPrice: it.p, ...(it.max ? { maxPrice: it.max } : {}) } };
+      return { '@type': 'Offer', price: it.p, priceCurrency: 'PKR' };
+    };
     salon.hasOfferCatalog = {
       '@type': 'OfferCatalog',
       name: `${NAME} services`,
@@ -50,8 +56,9 @@ export function schemaGraph({ origin, url, view, title, description }: Args) {
         itemListElement: c.items.map((it) => ({
           '@type': 'Service',
           name: it.n,
-          description: it.d,
+          ...(it.d ? { description: it.d } : {}),
           provider: { '@id': id('salon') },
+          ...(offer(it) ? { offers: offer(it) } : {}),
         })),
       })),
     };

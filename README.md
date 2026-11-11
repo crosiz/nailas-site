@@ -16,8 +16,6 @@ npm run preview          # serves dist/ locally
 npm run check            # runs the build checks again on an existing dist/
 ```
 
-`npm run dev:preview` and `npm run build:preview` show the design with sample prices. They are for showing the studio the full design and must never be deployed (see "Prices").
-
 ## Deploy on Vercel
 
 1. Push the repository to GitHub (a private repository is fine).
@@ -46,15 +44,23 @@ The public address comes from `astro.config.mjs` (`https://nailasbeautystudio.co
 
 `robots.txt` allows every crawler and lists the sitemap. Each page’s date in the sitemap comes from `src/data/lastmod.json`, not from the build date. Change a page’s date only when its text, prices, structured data or links really change.
 
+## Announcement bar and opening hours
+
+A slim bar at the top of every page announces the soft launch (Wednesday 11 November 2026, 4:00 PM). It is set up in `ANNOUNCEMENT` in `src/data/site.ts` and worded in `src/lib/announcement.ts`. Its wording follows the date in Pakistan: before the day it names the date, on the day it says "Today at 4:00 PM", and afterwards it says "Now open" with the hours. It folds away when the page is scrolled and disappears for good after its end date (`until`). To take it off the site, set `ANNOUNCEMENT` to `null`.
+
+The opening hours (Wednesday to Monday, 11:00 am to 8:00 pm, closed on Tuesdays) appear on the Contact page, in the footer, in the bar and in the structured data (`src/lib/schema.ts`). If they change, change all four. The build check fails if the structured data shows times the Contact page does not.
+
 ## Prices
 
-The studio has not confirmed its prices, so the live build shows none: no price columns, no price copy, and every service row opens WhatsApp. When the prices are confirmed, enter them in `src/data/menu.ts` and set `pricesConfirmed = true` in `src/data/site.ts`. The price wording then comes back by itself.
+The Services page shows the studio's own price list (received in November 2026). Everything on it comes from `src/data/menu.ts`: each group, each service and its price. To change a price, edit it there and rebuild. The comment at the top of that file shows how to write a single price, a range ("Rs 2,000–3,500"), a "from" price and a label such as "Consultation". Prices that depend on hair length list the four lengths in the line under the name. Tapping a service opens WhatsApp with a message about it.
+
+The notes at the bottom of the page (the salon policy and the massage line) are in `src/partials/services.html`. The build check fails if the page loses its price rows or a row has no price or label. Update the date for `/services/` in `src/data/lastmod.json` whenever prices change.
 
 ## Where things are
 
 - `src/partials/*.html` is the content of each page. `src/pages/*.astro` are the page shells, and `src/layouts/Base.astro` is the shared head, header and footer.
-- `src/data/menu.ts` holds the services, descriptions and bridal events. `src/data/site.ts` holds the WhatsApp number and the prices switch. `src/data/lastmod.json` holds the sitemap dates.
-- `src/lib/schema.ts` builds the structured data (JSON-LD). `src/lib/copy.ts` rewrites the price wording for the live build. `src/lib/ref.ts` adds a short `Ref:` line to prefilled WhatsApp messages, so the chat shows which page the visitor came from.
+- `src/data/menu.ts` holds the services, prices and bridal events. `src/data/site.ts` holds the WhatsApp number. `src/data/lastmod.json` holds the sitemap dates.
+- `src/lib/schema.ts` builds the structured data (JSON-LD), including the priced service list. `src/lib/views.ts` turns the menu into the Services page rows. `src/lib/ref.ts` adds a short `Ref:` line to prefilled WhatsApp messages, so the chat shows which page the visitor came from.
 - `src/pages/robots.txt.ts` and `src/pages/sitemap.xml.ts` produce `robots.txt` and `sitemap.xml`.
 - `src/styles/global.css` is all the CSS. `src/scripts/site.ts` is all the behaviour (menu, slideshow, tabs, before/after slider, booking form).
 - `public/` holds the photos, fonts and icons that are served as they are.
@@ -64,12 +70,12 @@ The studio has not confirmed its prices, so the live build shows none: no price 
 
 ## What the build check looks for
 
-It fails the build if it finds a broken link or asset, an image without alt text, a page without exactly one `<h1>`, a missing, duplicate or over-long title or description, a missing or wrong canonical address, a sitemap address that is not a real page or has no valid date, structured data that does not parse, a second phone number, a footer without the address block, a `noindex` header, robots rules that block search crawlers, or any price or "sample" wording in a live build.
+It fails the build if it finds a broken link or asset, an image without alt text, a page without exactly one `<h1>`, a missing, duplicate or over-long title or description, a missing or wrong canonical address, a sitemap address that is not a real page or has no valid date, structured data that does not parse, a second phone number, a footer without the address block, a `noindex` header, robots rules that block search crawlers, leftover "sample price" wording, or a Services page that has lost its price rows.
 
 ## SEO and AI search
 
 - Every page has its own title, description, canonical address and Open Graph tags, and one `<h1>`.
-- The structured data is one `BeautySalon` (name, address, phone, logo, three photo shapes, Instagram) plus `WebSite`, `WebPage` or `ContactPage`, `BreadcrumbList` on inner pages and a service list on `/services/`. Opening hours, coordinates, postal code, price range and reviews are left out until the studio confirms them. Add each one to the page first, then to `src/lib/schema.ts`.
+- The structured data is one `BeautySalon` (name, address, phone, logo, three photo shapes, Instagram) plus `WebSite`, `WebPage` or `ContactPage`, `BreadcrumbList` on inner pages and, on `/services/`, the full service list with the same prices as the page. Opening hours, coordinates, postal code, price range and reviews are left out until the studio confirms them. Add each one to the page first, then to `src/lib/schema.ts`.
 - For AI search there are no special files. What helps is what also helps Google: crawlers are allowed in `robots.txt`, the pages answer common questions in plain words, and the name, address and phone number are the same everywhere (page text, footer, structured data, and later the Business Profile).
 - The share image is `public/img/og-share.jpg`. WhatsApp keeps preview images for a long time, so add `?v=2` to a link when you share it after changing the image.
 - The privacy page says the site sets no cookies and loads nothing from other companies, apart from the Google map on the Contact page. If analytics or anything else is added, update `src/partials/privacy.html` first.
@@ -78,8 +84,7 @@ It fails the build if it finds a broken link or asset, an image without alt text
 
 - Control of the domain and its DNS records.
 - The exact spelling on the signboard (Studio or Salon, Sangam).
-- Fixed opening hours, or "by appointment only".
 - The postal code and the map pin for the exact unit (the Contact page map is centred on Sangam Market; replace the `src` in `src/partials/contact.html` with the "Embed a map" address from the Business Profile).
-- Real prices and durations.
+- Durations for the services (the price list is in; durations are not).
 - Permission to use the client photos, and higher-resolution copies.
 - Confirmation of the wording about skin tones and the bridal events, and the next academy intake date.

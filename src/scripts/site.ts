@@ -7,6 +7,15 @@ const WA = 'https://wa.me/923335559049?text=';
 const view = document.body.dataset.view || 'home';
 const header = $('.header')!, fab = $('#waFab'), dockEl = $('#dock'), sheet = $('#sheet')!, mb = $('#menuBtn')!;
 
+/* Announcement bar: its wording follows today's date in Pakistan (before, on the day, after the launch), and it goes after its end date */
+const ann = $('#ann');
+if (ann) {
+  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Karachi' }).format(new Date());
+  const { launch = '', until = '' } = ann.dataset;
+  if (until && today > until) { ann.remove(); document.body.classList.remove('has-ann'); }
+  else ann.dataset.state = today < launch ? 'before' : today === launch ? 'today' : 'after';
+}
+
 /* Category tabs (Services): the underline slides to the category in view */
 const tabsIn = $('#catNav'), ink = $('.tabs-bar__ink'), catBtns = $$<HTMLButtonElement>('#catNav button');
 const tabsBar = $('.tabs-bar'), menuHead = $('.ph--menu');
@@ -69,11 +78,8 @@ if (hasIO) {
   reveals.forEach((el, k) => { if (revealTops[k] > innerHeight * 0.94) { el.classList.add('pre'); rio.observe(el); } });
 }
 
-/* Price rows rise in one after another; the before/after line shows it can move */
+/* The before/after line nudges itself once to show it can move */
 if (hasIO && !reduce) {
-  const pio = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.remove('is-low'); pio.unobserve(e.target); } }), { threshold: 0.15 });
-  const lists = $$('.prices'), listTops = lists.map((ul) => ul.getBoundingClientRect().top);
-  lists.forEach((ul, k) => { ul.classList.add('stagger'); if (listTops[k] > innerHeight * 0.9) { ul.classList.add('is-low'); pio.observe(ul); } });
   const baEl = $('#ba'), baIn = $<HTMLInputElement>('#baRange');
   if (baEl && baIn) {
     let touched = false;

@@ -9,9 +9,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "dev:preview": "astro dev --mode preview",
     "build": "astro build && node scripts/check-dist.mjs",
-    "build:preview": "astro build --mode preview && node scripts/check-dist.mjs --preview",
     "preview": "astro preview",
     "check": "node scripts/check-dist.mjs",
     "smoke": "node scripts/smoke-test.mjs"

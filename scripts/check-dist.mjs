@@ -1,14 +1,12 @@
 // Runs after every build (`npm run build`) and on demand (`npm run check`). It fails the build if the output
 // would ship something broken, so a bad deploy is stopped on the host instead of reaching visitors.
 //
-//   node scripts/check-dist.mjs            check dist/ as a LIVE build (no sample prices allowed)
-//   node scripts/check-dist.mjs --preview  check dist/ as a PREVIEW build (sample prices allowed)
+//   node scripts/check-dist.mjs            check dist/
 //   node scripts/check-dist.mjs <dir>      check another folder
 import fs from 'node:fs';
 import path from 'node:path';
 
 const args = process.argv.slice(2);
-const preview = args.includes('--preview');
 const dist = path.resolve(args.find((a) => !a.startsWith('--')) || 'dist');
 if (!fs.existsSync(dist)) { console.error(`check-dist: ${dist} does not exist. Run the build first.`); process.exit(1); }
 
@@ -137,7 +135,12 @@ for (const f of pages) {
         if (salon.priceRange && !visible.includes(String(salon.priceRange))) bad(`${name}: structured data has priceRange "${salon.priceRange}" but the page does not show it`);
         if (salon.openingHoursSpecification && name === 'contact/index.html') {
           const specs = [].concat(salon.openingHoursSpecification);
-          for (const spec of specs) for (const t of [spec.opens, spec.closes].filter(Boolean)) if (!visible.includes(t) && !visible.includes(t.replace(/^0/, ''))) bad(`${name}: structured data has opening time ${t} but the page does not show it`);
+          // the page may write 20:00 as "8:00 pm" or "8 pm"
+          const shown = (t) => {
+            const [h, m] = t.split(':').map(Number), mm = String(m).padStart(2, '0'), ap = h < 12 ? 'am' : 'pm', h12 = h % 12 || 12, low = visible.toLowerCase();
+            return visible.includes(t) || [`${h12}:${mm} ${ap}`, `${h12}:${mm}${ap}`, ...(mm === '00' ? [`${h12} ${ap}`] : [])].some((v) => low.includes(v));
+          };
+          for (const spec of specs) for (const t of [spec.opens, spec.closes].filter(Boolean)) if (!shown(t)) bad(`${name}: structured data has opening time ${t} but the page does not show it`);
         }
         if (salon.openingHoursSpecification && name !== 'contact/index.html' && !/Hours/i.test(visible)) bad(`${name}: opening hours are in the structured data but this page shows no hours`);      }
       for (const crumb of nodes.filter((n) => n['@type'] === 'BreadcrumbList')) {
@@ -154,13 +157,18 @@ for (const f of pages) {
   if (/Sangum/i.test(s)) bad(`${name}: uses the spelling "Sangum"; the site spells it "Sangam" everywhere`);
   if (!/<a href="\/privacy\/">Privacy<\/a>/.test(s)) bad(`${name}: the footer has no link to the privacy page`);
 
-  // the live build must never carry the design's invented prices
-  if (!preview) {
-    const text = s.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '');
-    if (/\bRs\s?\d/.test(text)) bad(`${name}: contains a rupee price, but this is a live build (prices are not confirmed)`);
-    if (/sample-note|sample prices?|sample starting/i.test(text)) bad(`${name}: contains "sample price" copy in a live build`);
-    if (/<small>from<\/small>/.test(text)) bad(`${name}: contains a "from" price tag in a live build`);
-  }
+  // no wording left over from the design's sample prices
+  if (/sample-note|sample prices?|sample starting/i.test(s.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, ''))) bad(`${name}: still contains "sample price" wording`);
+}
+
+// The Services page is the price list. Every row needs a price or a label, and the page must not lose its rows.
+{
+  const p = path.join(dist, 'services/index.html');
+  const svc = fs.existsSync(p) ? read(p) : '';
+  const rows = [...svc.matchAll(/<span class="menu-item__price">(.*?)<\/span>/g)].map((m) => m[1]);
+  if (rows.length < 100) bad(`services/index.html: only ${rows.length} price rows found (the list has about 125)`);
+  for (const r of rows) if (!/\d|free|consultation|by appointment/i.test(r)) bad(`services/index.html: a row has no price or label ("${r}")`);
+  if (/undefined|NaN/.test(svc.replace(/<script[\s\S]*?<\/script>/g, ''))) bad('services/index.html: contains "undefined" or "NaN" (a price did not render)');
 }
 
 for (const [what, map] of Object.entries(seen)) for (const [value, where] of map) if (where.length > 1) bad(`the same ${what === 'titles' ? '<title>' : 'meta description'} is used on ${where.join(', ')}`);
@@ -217,9 +225,8 @@ if (!/^Sitemap: https:\/\//m.test(robots)) bad('robots.txt has no https Sitemap 
   if (groups.some((g) => g.some((l) => /^user-agent:\s*\*\s*$/i.test(l)) && g.some((l) => /^disallow:\s*\/\s*$/i.test(l)))) bad('robots.txt: "User-agent: *" is set to Disallow: /, which hides the whole site');
 }
 
-const mode = preview ? 'preview (sample prices allowed)' : 'live';
 if (problems.length) {
-  console.error(`\ncheck-dist: ${problems.length} problem${problems.length > 1 ? 's' : ''} in the ${mode} build:\n` + problems.map((p) => '  - ' + p).join('\n') + '\n');
+  console.error(`\ncheck-dist: ${problems.length} problem${problems.length > 1 ? 's' : ''} in the build:\n` + problems.map((p) => '  - ' + p).join('\n') + '\n');
   process.exit(1);
 }
-console.log(`check-dist: ${mode} build OK — ${pages.length} pages, links, assets, icons, sitemap and contact number all check out.`);
+console.log(`check-dist: build OK — ${pages.length} pages, links, assets, icons, sitemap and contact number all check out.`);
