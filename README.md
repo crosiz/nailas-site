@@ -42,13 +42,17 @@ The public address comes from `astro.config.mjs` (`https://nailasbeautystudio.co
 4. Add the site to Bing Webmaster Tools as well (it can import the Search Console property).
 5. Create and verify a Google Business Profile with the same name, address and phone number as the website. For a local business this matters more than anything on the site.
 
+**Two Search Console statuses to expect.** "Page with redirect" for `http://nailasbeautystudio.com/` is not a fault: it is the redirect to the https address doing its job, and Google lists redirecting addresses under "not indexed" on purpose. "Duplicate without user-selected canonical" for `http://www.nailasbeautystudio.com/` meant Google found the www copy and had no canonical to follow. Every page now declares its own https canonical, and `vercel.json` redirects the www address permanently to `https://nailasbeautystudio.com` (the build check fails if that rule is removed). After a deploy, open the report, click **Validate fix**, and use URL Inspection on the main address to request indexing. Google recrawls on its own schedule, so the old rows clear over a few weeks.
+
 `robots.txt` allows every crawler and lists the sitemap. Each page’s date in the sitemap comes from `src/data/lastmod.json`, not from the build date. Change a page’s date only when its text, prices, structured data or links really change.
 
-## Announcement bar and opening hours
+## Grand opening: the bar, the poster and the opening hours
 
-A slim bar at the top of every page announces the soft launch (Wednesday 11 November 2026, 4:00 PM). It is set up in `ANNOUNCEMENT` in `src/data/site.ts` and worded in `src/lib/announcement.ts`. Its wording follows the date in Pakistan: before the day it names the date, on the day it says "Today at 4:00 PM", and afterwards it says "Now open" with the hours. It folds away when the page is scrolled and disappears for good after its end date (`until`). To take it off the site, set `ANNOUNCEMENT` to `null`.
+**The bar.** A slim bar at the top of every page counts down to the grand opening (Friday 13 November 2026, 11:00 am Pakistan time). The countdown, the opening moment and the last day the bar is shown are set in `ANNOUNCEMENT` in `src/data/site.ts`; the wording is in `src/lib/announcement.ts`. When the clock reaches zero the bar says "Open today until 8 pm" (until closing on the opening day), then "Now open" with the hours, and after its last day (30 November 2026) it disappears by itself. Set `ANNOUNCEMENT` to `null` to take it off. Clicking the bar opens the Contact page.
 
-The opening hours (Wednesday to Monday, 11:00 am to 8:00 pm, closed on Tuesdays) appear on the Contact page, in the footer, in the bar and in the structured data (`src/lib/schema.ts`). If they change, change all four. The build check fails if the structured data shows times the Contact page does not.
+**The poster.** On the home page a pop-up shows the opening flyer once per visit, until the end of the opening day (`POSTER` in `src/data/site.ts`). It can be closed with the cross, the Escape key or a tap outside the picture, and then it does not come back until the browser tab is closed. It is not shown to people who arrive from a search engine, because Google ranks pages lower when a pop-up covers them straight after a search click. The image is `public/img/grand-opening.webp`, made from `assets-src/grand-opening-poster.jpg` by `assets-src/build-images.mjs`. When the poster is taken down, also remove "The opening poster" paragraph from `src/partials/privacy.html`.
+
+**The opening hours** (Wednesday to Monday, 11:00 am to 8:00 pm, closed on Tuesdays) appear on the Contact page, in the footer, in the bar and in the structured data (`src/lib/schema.ts`). If they change, change all four. The build check fails if the structured data shows times the Contact page does not.
 
 ## Prices
 
@@ -78,7 +82,7 @@ It fails the build if it finds a broken link or asset, an image without alt text
 - The structured data is one `BeautySalon` (name, address, phone, logo, three photo shapes, Instagram) plus `WebSite`, `WebPage` or `ContactPage`, `BreadcrumbList` on inner pages and, on `/services/`, the full service list with the same prices as the page. Opening hours, coordinates, postal code, price range and reviews are left out until the studio confirms them. Add each one to the page first, then to `src/lib/schema.ts`.
 - For AI search there are no special files. What helps is what also helps Google: crawlers are allowed in `robots.txt`, the pages answer common questions in plain words, and the name, address and phone number are the same everywhere (page text, footer, structured data, and later the Business Profile).
 - The share image is `public/img/og-share.jpg`. WhatsApp keeps preview images for a long time, so add `?v=2` to a link when you share it after changing the image.
-- The privacy page says the site sets no cookies and loads nothing from other companies, apart from the Google map on the Contact page. If analytics or anything else is added, update `src/partials/privacy.html` first.
+- The privacy page says the site sets no cookies and loads nothing from other companies, apart from the Google map on the Contact page. It also says the browser remembers, for the visit only, that the opening poster was closed. If analytics or anything else is added, update `src/partials/privacy.html` first.
 
 ## Still needed from the studio
 

@@ -6,12 +6,13 @@
 // The browser and phone icons have their own script: assets-src/build-icons.mjs
 //
 // Inputs:  assets-src/brand-mono.webp, brand-word.webp (full-size logo files),
-//          assets-src/d-gold-hands.webp, d-red-jewel.webp (full-size photos),
+//          assets-src/d-gold-hands.webp, d-red-jewel.webp (full-size photos), grand-opening-poster.jpg (the opening flyer),
 //          public/img/hero-ivory.webp, hero-rose.webp
 // Outputs: public/img/brand-mono.webp, brand-word.webp   (resized to what the pages can show, about 3x)
 //          public/img/logo-512.png                       (square logo on white, for the `logo` field in the structured data)
 //          public/img/schema-{1x1,4x3,16x9}.jpg          (the three shapes Google asks for in the business `image` field)
 //          public/img/og-share.jpg                       (1200x630 link-preview card: logo plus one portrait)
+//          public/img/grand-opening.webp                 (the opening flyer for the home page pop-up)
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
@@ -60,3 +61,7 @@ for (const f of ['schema-1x1.jpg', 'schema-4x3.jpg', 'schema-16x9.jpg']) { const
   const m = await sharp(img('og-share.jpg')).metadata();
   console.log('og-share.jpg', `${m.width}x${m.height}`, kb(img('og-share.jpg')));
 }
+
+// ---- 4. the opening flyer for the home page pop-up, saved as WebP at its own width ----
+await sharp(path.join(root, 'assets-src/grand-opening-poster.jpg')).webp({ quality: 82, effort: 6 }).toFile(img('grand-opening.webp'));
+{ const m = await sharp(img('grand-opening.webp')).metadata(); console.log('grand-opening.webp', `${m.width}x${m.height}`, kb(img('grand-opening.webp'))); }

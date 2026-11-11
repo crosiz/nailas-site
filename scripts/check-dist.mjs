@@ -196,6 +196,13 @@ if (process.env.VERCEL_ENV === 'production' && process.env.ALLOW_OTHER_ORIGIN !=
   for (const c of [...canon.values()].slice(0, 1)) if (new URL(c).origin !== EXPECTED_ORIGIN) bad(`a production build must use ${EXPECTED_ORIGIN} but a page says ${new URL(c).origin}. Fix SITE_URL, or set ALLOW_OTHER_ORIGIN=1 only for a temporary launch without the domain.`);
 const vercelJson = new URL('../vercel.json', import.meta.url);
 if (fs.existsSync(vercelJson) && /x-robots-tag/i.test(fs.readFileSync(vercelJson, 'utf8')) && /noindex/i.test(fs.readFileSync(vercelJson, 'utf8'))) bad('vercel.json sets a noindex header, which would hide the whole site from search');
+// The www address must redirect permanently to the main address, so Google keeps one copy of every page
+// (without it Search Console lists the www pages as "Duplicate without user-selected canonical").
+if (fs.existsSync(vercelJson)) {
+  const redirects = JSON.parse(fs.readFileSync(vercelJson, 'utf8')).redirects || [];
+  const wwwToApex = redirects.some((r) => r.permanent === true && (r.has || []).some((h) => h.type === 'host' && /^www\./.test(h.value)) && String(r.destination).startsWith(EXPECTED_ORIGIN + '/'));
+  if (!wwwToApex) bad(`vercel.json has no permanent redirect from the www address to ${EXPECTED_ORIGIN}`);
+}
 
 // sitemap details: only the tags Google and Bing use, an honest-looking lastmod on every URL, every built page listed, images exist
 {

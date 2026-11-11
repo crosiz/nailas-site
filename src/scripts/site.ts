@@ -7,13 +7,58 @@ const WA = 'https://wa.me/923335559049?text=';
 const view = document.body.dataset.view || 'home';
 const header = $('.header')!, fab = $('#waFab'), dockEl = $('#dock'), sheet = $('#sheet')!, mb = $('#menuBtn')!;
 
-/* Announcement bar: its wording follows today's date in Pakistan (before, on the day, after the launch), and it goes after its end date */
+/* Announcement bar: a countdown to the grand opening, in Pakistan time. When it reaches zero the bar says the studio is open
+   (until 8 pm on the opening day, then with the hours), and after its end date the bar goes away. */
 const ann = $('#ann');
 if (ann) {
-  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Karachi' }).format(new Date());
-  const { launch = '', until = '' } = ann.dataset;
-  if (until && today > until) { ann.remove(); document.body.classList.remove('has-ann'); }
-  else ann.dataset.state = today < launch ? 'before' : today === launch ? 'today' : 'after';
+  const CLOSES = 20 * 60; // the studio closes at 8 pm
+  const opens = new Date(ann.dataset.opens || '').getTime(), until = ann.dataset.until || '';
+  const dayFmt = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Karachi' });
+  const clockFmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Karachi', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  const cell = (u: string) => $('[data-u="' + u + '"]', ann)!;
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const tick = () => {
+    const now = Date.now(), today = dayFmt.format(now);
+    if (until && today > until) { ann.remove(); document.body.classList.remove('has-ann'); return; }
+    let state = 'after';
+    if (now < opens) state = 'before';
+    else if (today === dayFmt.format(opens)) {
+      const parts = clockFmt.formatToParts(now);
+      const mins = Number(parts.find((p) => p.type === 'hour')!.value) * 60 + Number(parts.find((p) => p.type === 'minute')!.value);
+      if (mins < CLOSES) state = 'open';
+    }
+    if (state === 'before') {
+      const left = Math.floor((opens - now) / 1000);
+      cell('d').textContent = pad(Math.floor(left / 86400)); cell('h').textContent = pad(Math.floor((left % 86400) / 3600));
+      cell('m').textContent = pad(Math.floor((left % 3600) / 60)); cell('s').textContent = pad(left % 60);
+    }
+    ann.dataset.state = state; ann.dataset.live = '';
+    window.setTimeout(tick, state === 'before' ? 1000 - (now % 1000) : 30000);
+  };
+  tick();
+}
+
+/* Opening poster: a pop-up on the home page, once per visit. It is left out for people who arrive from a search engine
+   (Google ranks pages that cover the content straight after a search click lower), and once it has been closed the
+   browser remembers that until the tab is closed. */
+const poster = $<HTMLDialogElement>('#poster');
+if (poster && view === 'home' && typeof poster.showModal === 'function') {
+  const KEY = 'naila-poster-closed';
+  let closed = false;
+  try { closed = sessionStorage.getItem(KEY) === '1'; } catch { /* storage blocked: the poster simply shows */ }
+  let from = '';
+  try { from = new URL(document.referrer).hostname; } catch { /* no referrer */ }
+  const fromSearch = /(^|\.)(google|bing|duckduckgo|yahoo|yandex|ecosia|baidu|brave|startpage|qwant)\./i.test(from);
+  const over = !!poster.dataset.until && new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Karachi' }).format(new Date()) > poster.dataset.until;
+  poster.addEventListener('close', () => { try { sessionStorage.setItem(KEY, '1'); } catch { /* ignore */ } });
+  poster.addEventListener('click', (e) => { if (e.target === poster) poster.close(); }); // a click outside the picture closes it
+  $('.poster__close', poster)?.addEventListener('click', () => poster.close());
+  if (!closed && !fromSearch && !over) {
+    const img = $<HTMLImageElement>('img', poster)!;
+    img.addEventListener('load', () => window.setTimeout(() => { if (!poster.open) poster.showModal(); }, 700), { once: true });
+    const start = () => { img.src = img.dataset.src!; };
+    if (document.readyState === 'complete') start(); else addEventListener('load', start, { once: true });
+  }
 }
 
 /* Category tabs (Services): the underline slides to the category in view */
